@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.care.boot.board.IBoardMapper">
+    	<resultMap type="com.care.boot.board.BoardDTO" id="board_quiz">
+    		<result column="write_date" property="writeDate"/>
+    		<result column="file_name" property="fileName"/>
+    	</resultMap>
+    	
+    	<select id="boardForm" resultMap="board_quiz"><!-- 결과를 담을떄는 resultMap을 보고 다른것을 확인한 후 값을 넣어달라. -->
+    		SELECT B.* FROM (SELECT rownum() as r, A.* FROM (SELECT board_quiz.* FROM board_quiz order by no DESC)A)B WHERE B.r BETWEEN #{begin} and #{end}
+    	</select>
+    	
+    	<select id="totalCount">
+			SELECT count(no) FROM board_quiz
+		</select>
+		
+		<select id="boardContent" resultMap="board_quiz">
+			SELECT * FROM board_quiz where no = #{n}
+		</select>
+		
+		<select id="boardDownload" >
+			SELECT file_name FROM board_quiz WHERE no=#{n}
+		</select>
+		
+	<insert id="boardWriteProc">
+	<selectKey order="BEFORE" keyProperty="no" resultType="int">
+		SELECT NVL(max(no), 0)+1 FROM board_quiz <!-- Max(no)를 했는데 null이라면  0을 반환, 그게 아니면 +1 -->
+		<!-- 위 코드가 먼저 실행된후 나온 값이 keyProperty="no"로 인해 no라는 값에 저장되어 아래 코드로 넘어간다.  -->
+	</selectKey>
+		INSERT INTO board_quiz 
+		VALUES(#{no}, #{title}, #{content}, #{id}, #{writeDate}, 0, #{fileName})
+	</insert>
+	
+	<update id="incrementHits">
+		update board_quiz set hits=hits+1 where no=#{n}
+	</update>
+	
+	<update id="boardModifyProc">
+		UPDATE board_quiz SET title=#{title}, content=#{content} WHERE no=#{no}
+	</update>
+	
+	<delete id="boardDeleteProc">
+		DELETE FROM board_quiz WHERE no=#{n}
+	</delete>
+	
+    </mapper>
