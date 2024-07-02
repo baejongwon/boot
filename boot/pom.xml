@@ -95,7 +95,7 @@
 		        <configuration>
 		          <to>
 		            <image>docker.io/dtktop101/cicd-project-ansible</image>
-		            <tags>lastest</tags>
+		            <tags>latest</tags>
 		          </to>
 		        </configuration>
 	     	 </plugin>
