@@ -94,7 +94,7 @@
 		        <version>3.4.3</version>
 		        <configuration>
 		          <to>
-		            <image>docker.io/dtktop101/cicd-project-ansible</image>
+		            <image>docker.io/dtktop101/hyo</image>
 		            <tags>lastest</tags>
 		          </to>
 		        </configuration>
